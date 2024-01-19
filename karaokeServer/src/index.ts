@@ -7,7 +7,9 @@ import cors from 'cors';
 
 import mongoose from 'mongoose';
 
-import SongRoutes from "./routes/SongRoutes";
+import SongRoutes from "./routes/SongRoute";
+import AuthenticationRoutes from "./routes/AuthenicationRoute";
+import UserRoutes from "./routes/UserRoute";
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -37,4 +39,4 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGO_URL);
 mongoose.connection.on('error', (error: Error) => console.log(error));
 
-app.use("/api/v1", SongRoutes)
+app.use("/api/v1", SongRoutes, AuthenticationRoutes, UserRoutes);

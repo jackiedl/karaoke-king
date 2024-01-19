@@ -30,6 +30,7 @@ const Player = () =>{
         <div className="bg-black rounded-xl md:col-span-1 col-span-2">
           <div className="bg-[#212121] rounded-xl">
             <h1 className="text-2xl px-2 py-3 text-white">Playing Next</h1>
+            
           </div>
           <div className="max-h-[37vh] overflow-x-hidden overflow-y-scroll scroll">
             {queue.map((s, id)=>{
