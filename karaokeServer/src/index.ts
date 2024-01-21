@@ -1,42 +1,20 @@
 import express from 'express';
-import http from 'http';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import compression from 'compression';
+import { PORT } from './ultis/config';
+import { errorHandler } from './middleware/errorMiddleware';
+import { connectDB } from './database/db';
 import cors from 'cors';
 
-import mongoose from 'mongoose';
-
-import SongRoutes from "./routes/SongRoute";
-import AuthenticationRoutes from "./routes/AuthenicationRoute";
-import UserRoutes from "./routes/UserRoute";
-
-const dotenv = require('dotenv');
-dotenv.config();
-
-const PORT = process.env.PORT || 3030;
+connectDB();
 
 const app = express();
-
 app.use(cors({
   credentials: true,
 }));
+app.use(express.json());
 
-app.use(compression());
-app.use(cookieParser());
-app.use(bodyParser.json());
+app.use('/api/songs', require('./routes/SongRoute'));
+app.use('/api/users', require('./routes/UserRoute'));
 
-const server = http.createServer(app);
+app.use(errorHandler);
 
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}/`);
-});
-
-
-const MONGO_URL = process.env.CONNECTION_URL || "";
-
-mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
-mongoose.connection.on('error', (error: Error) => console.log(error));
-
-app.use("/api/v1", SongRoutes, AuthenticationRoutes, UserRoutes);
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

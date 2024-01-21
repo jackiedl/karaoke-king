@@ -1,11 +1,22 @@
 import express from 'express';
-
-import { addSong, getSongs, updateViewCount } from '../controllers/SongController';
-
+import { protect } from '../middleware/authMiddleware';
 const router = express.Router();
 
-router.get("/songs", getSongs);
-router.post("/addSong", addSong);
-router.patch("/updateView/:id", updateViewCount);
+const { getSongsHandler, 
+        addSongHandler, 
+        getSongByIdHandler, 
+        updateSongHandler, 
+        deleteSongHandler 
+} = require("../controllers/SongController");
 
-export default router;
+router
+  .route('/') 
+  .get(getSongsHandler)
+  .post(protect, addSongHandler);
+router
+  .route('/:id')  
+  .get(getSongByIdHandler)
+  .put(protect, updateSongHandler)
+  .delete(protect, deleteSongHandler);
+
+module.exports = router;

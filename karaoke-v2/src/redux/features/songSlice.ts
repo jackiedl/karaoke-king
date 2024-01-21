@@ -39,7 +39,6 @@ export const getSongs = createAsyncThunk("getSongs", async () => {
 
 export const addSong = createAsyncThunk("addSong", async (song: Song, thunkAPI) => {
   try{
-    console.log(song);
     const response = await api.addSong(song);
     return response.data;
   }

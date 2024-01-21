@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { logo, lock, menu, close} from "../../assets";
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../../redux/app/hooks";
+import { logout } from "../../redux/features/authSlice";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
+  const isLogged = useAppSelector(state => state.auth.isLoggedIn);
+
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
@@ -17,6 +22,15 @@ const Navbar = () => {
 
   const handleToCatalog = () => {
     navigate("/results")
+  }
+
+  const handleToLogin = () => {
+    navigate("/auth/login")
+  }
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/auth/login")
   }
 
   return(
@@ -33,11 +47,18 @@ const Navbar = () => {
               <li className="hover:cursor-pointer">Contact</li>
             </ul>
           </div>
-          {/* <button className="flex justify-between items-center bg-transparent px-6 gap-2">
-            <img src={lock} alt="lock"/>
-            Login
-          </button>
-          <button className="px-8 py-3 rounded-md bg-[#9F2DD3] text-white font-bold">Register</button> */}
+          {
+            !isLogged ? 
+            <button className="flex justify-between items-center bg-transparent px-6 gap-2" onClick={handleToLogin}>
+              <img src={lock} alt="lock"/>
+              Login
+            </button> :
+            <button className="flex justify-between items-center bg-transparent px-6 gap-2" onClick={handleLogout}>
+              <img src={lock} alt="lock"/>
+              Logout
+            </button>
+          }
+          {/* <button className="px-8 py-3 rounded-md bg-[#9F2DD3] text-white font-bold">Register</button> */}
         </div>
 
         <div className="md:hidden hover:cursor-pointer" onClick={handleClick}>
@@ -52,13 +73,13 @@ const Navbar = () => {
             <li className="p-4 hover:bg-gray-100 hover:cursor-pointer">About</li>
             <li className="p-4 hover:bg-gray-100 hover:cursor-pointer" onClick={handleToCatalog}>Catalog</li>
             <li className="p-4 hover:bg-gray-100 hover:cursor-pointer">Contact</li>
-            {/* <div className="flex flex-col my-4 gap-4">
-              <button className="border border-[#9F2DD3] flex justify-center items-center bg-transparent px-6 py-4 gap-2">
+            <div className="flex flex-col my-4 gap-4">
+              <button className="border border-[#9F2DD3] flex justify-center items-center bg-transparent px-6 py-4 gap-2" onClick={handleToLogin}>
                 <img src={lock} alt="lock"/>
                 Login
               </button>
-              <button className="px-8 py-5 rounded-md bg-[#9F2DD3] text-white font-bold">Register</button>
-            </div> */}
+              {/* <button className="px-8 py-5 rounded-md bg-[#9F2DD3] text-white font-bold">Register</button> */}
+            </div>
         </ul>
       </div>
     

@@ -3,10 +3,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import songSliceReducer from "../features/songSlice";
 import searchSlice from "../features/searchSlice";
+import authSlice from "../features/authSlice";
 
 const rootReducer = combineReducers({
   songs: songSliceReducer,
-  search: searchSlice
+  search: searchSlice,
+  auth: authSlice,
 });
 
 export type RootState = ReturnType<typeof rootReducer>

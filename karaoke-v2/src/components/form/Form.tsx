@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch } from "../../redux/app/hooks";
 import { addSong } from "../../redux/features/songSlice";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
   const [title, setTitle] = useState("");
@@ -8,8 +9,11 @@ const Form = () => {
   const [videoLink, setVideoLink] = useState("");
   const [albumCover, setAlbumCover] = useState("");
   const [genre, setGenre] = useState("");
+  const [invaildInput, setInvaildInput] = useState(false);
+  const [vaildInput, setVaildInput] = useState(false);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleOnChangeTitle = (e:any) => {
     const value = e.target.value;
@@ -32,7 +36,16 @@ const Form = () => {
     setGenre(value);
   }
 
-  const handleOnAdd = () => {
+  const clear = () => {
+    setTitle("");
+    setArtist("");
+    setVideoLink("");
+    setAlbumCover("");
+    setGenre("");
+  }
+
+  const handleOnAdd = (e:any) => {
+    e.preventDefault();
     const song = {
       title: title,
       artist: artist,
@@ -41,14 +54,40 @@ const Form = () => {
       genre: genre,
       views: 0
     }
-    dispatch(addSong(song));
+    if (!sessionStorage.getItem('users')){
+      navigate("/");
+    }
+    dispatch(addSong(song))
+    .then(response => {
+      if(response.payload) {
+        setVaildInput(true);
+        setInvaildInput(false);
+        clear();
+      }
+      else {
+        setInvaildInput(true);
+        setVaildInput(false);
+      }
+    })
   }
 
   return(
     <div className="w-full bg-white py-12">
       <div className="md:max-w-[1480px] m-auto grid md:grid-cols-2 max-w-[600px]">
         <form action="" className="form">
-          <h1 className="md:text-6xl text-5xl pb-12 text-[#9F2DD3]">Add Song</h1>
+          <h1 className="md:text-6xl text-5xl pb-7 text-[#9F2DD3]">Add Song</h1>
+          {
+            invaildInput ? 
+              <h2 className="text-[red] pb-5">
+                Invaild input, please try again
+              </h2> : null
+          }
+          {
+            vaildInput ? 
+              <h2 className="text-[green] pb-5">
+                Song added sucessfully!
+              </h2> : null
+          }
           <div className="form-group">
             <input className="form-input" type="text" id="title" placeholder=" " value={title} onChange={handleOnChangeTitle}/>
             <label className="form-label">Title</label>

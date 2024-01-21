@@ -12,6 +12,7 @@ import Catalog from "./catalog/Catalog";
 import Form from "./form/Form";
 import AutoComplete from "./catalog/AutoComplete";
 import Results from "./catalog/Results";
+import Login from "./form/Login";
 
 export {
   Navbar,
@@ -27,5 +28,6 @@ export {
   Catalog,
   Form,
   AutoComplete,
-  Results
+  Results,
+  Login,
 }
