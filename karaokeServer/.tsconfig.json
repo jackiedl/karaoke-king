@@ -9,5 +9,8 @@
     "strict": true,
     "useUnknownInCatchVariables": false
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src",
+    "src/**/*"
+  ]
 }
